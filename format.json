@@ -1,0 +1,25 @@
+[
+    {
+        "name": "string",
+        "Description": "string",
+        "Path": "string",
+        "UserDownloadable": "Bool",
+        "IsLocal": "Bool",
+        "AssetType": "string",
+        "AssetUsage": "string",
+        "ThumbnailPath": "string",
+        "GenerateThumbnailForExternalURL": "Bool"
+    },
+
+    {
+        "Name": "Flashcards - Ancient Civilization",
+        "Description": " ",
+        "Path": "https://www.alphagraphicsmarketing.com/AHS/1H-1Ancient-FlashCards-purple.pdf",
+        "UserDownloadable": false,
+        "IsLocal": false,
+        "AssetType": "2",
+        "AssetUsage": "PRODUCT",
+        "ThumbnailPath": " ",
+        "GenerateThumbnailForExternalURL": true
+    }
+]
