@@ -116,3 +116,76 @@ var credentials = new
 var authResponse = PresseroRequest("/v2/authentication", "POST", credentials);
 string token = authResponse.Token;
 Console.WriteLine($"Token: {token}");
+
+echo "2. Fetch Orders\n";
+$searchOrderFilter = array(
+    'StartDate' => '2019-01-01 00:00:00Z',
+    'EndDate' => '2019-03-01 00:00:00Z'
+);
+
+$orders = pressero_request('/v2/orders/search?pageNumber=0&pageSize=10', 'POST', $searchOrderFilter, $token);
+for($i = 0; $i < $orders['TotalItems']; $i++) {
+    $order = $orders['Items'][$i];
+    echo $order['OrderNumber'].'-'.$order['OrderItemNumber']."\n";
+}
+
+Console.WriteLine("2. Fetch Orders");
+var searchOrderFilter = new
+{
+    StartDate = new DateTime(2019, 01, 01).ToString("u"),
+    EndDate = new DateTime(2019, 03, 01).ToString("u")
+};
+
+var orders = PresseroRequest("/v2/orders/search?pageNumber=0&pageSize=10", "POST", searchOrderFilter, token);
+for (int i = 0; i < (int)orders.TotalItems; i++)
+{
+    var order = orders.Items[i];
+    Console.WriteLine($"{order.OrderNumber}-{order.OrderItemNumber}");
+}
+
+echo "3. Read Order Item\n";
+$orderNumber = 1;
+$orderItemSeq = 2;
+$orderItem = pressero_request("/v2/orders/$orderNumber/Item/$orderItemSeq/Details", "GET", null, $token);
+echo "Price for Order Item $orderNumber-$orderItemSeq: $" . $orderItem["Price"];
+
+Console.WriteLine("3. Read Order Item");
+var orderNumber = 1;
+var orderItemSeq = 2;
+var orderItem = PresseroRequest($"/v2/orders/{orderNumber}/Item/{orderItemSeq}/Details", "GET", null, token);
+Console.WriteLine($"Price for Order Item {orderNumber}-{orderItemSeq}: ${orderItem.Price}");
+
+echo "4. List Users\n";
+$users = pressero_request('/users', 'GET', null, $token);
+for($i = 0; $i < $users['TotalItems']; $i++) {
+    $user = $users['Items'][$i];
+    echo "[".$user["UserId"]."] ".$user['FullName']." (".$user['Email'].")\n";
+}
+
+Console.WriteLine("4. List Users");
+var users = PresseroRequest($"/users", "GET", null, token);
+for (int i = 0; i < (int)users.TotalItems; i++)
+{
+    var user = users.Items[i];
+    Console.WriteLine($"[{user.UserId}] {user.FullName} ({user.Email})");
+}
+
+echo "5. Update User\n";
+$userId = "858f2d2a-83e5-49ed-9234-b792c5eb193d"; //Webinar 2019
+$updatedUserData = array(
+    'LastName' => '2019 - php'
+);
+pressero_request("/users/$userId", "PUT", $updatedUserData, $token);
+$updatedUser = pressero_request("/users/$userId", "GET", null, $token);
+echo "[".$updatedUser["UserId"]."] ".$updatedUser['FullName']." (".$updatedUser['Email'].")\n";
+
+Console.WriteLine("5. Update User");
+var userId = Guid.Parse("858f2d2a-83e5-49ed-9234-b792c5eb193d"); //Webinar 2019
+var updatedUserData = new
+{
+    LastName = "2019 - dotnet"
+};
+PresseroRequest($"/users/{userId}", "PUT", updatedUserData, token);
+var updatedUser = PresseroRequest($"/users/{userId}", "GET", null, token);
+Console.WriteLine($"[{updatedUser.UserId}] {updatedUser.FullName} ({updatedUser.Email})");
+
